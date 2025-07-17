@@ -1,0 +1,49 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final counterProvider = StateProvider((ref) => 0);
+final ageProvider = StateProvider((ref)=>12);
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context,WidgetRef ref) {
+    print('build');
+    return  Scaffold(
+      appBar: AppBar(
+        title: Text('LearnProvider'),
+      ),
+      body: Column(
+        children: [
+          Consumer(
+            builder: (BuildContext context, WidgetRef ref, Widget? child) {
+              print('build2');
+             final counter = ref.watch(counterProvider);
+             return Center(
+               child: Text('$counter'),
+             );
+            },
+
+          ),
+          GestureDetector(onTap: (){
+            ref.read(counterProvider.notifier).state--;
+          },child: Text('-')),
+          GestureDetector(onTap: (){
+            ref.read(counterProvider.notifier).state++;
+          },child: Text('+')),
+
+          Consumer(builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            print('build3');
+            return   Text('Age : ${ref.watch(ageProvider)}');
+          },),
+
+          GestureDetector(onTap: (){
+            ref.read(ageProvider.notifier).state--;
+          },child: Text('-')),GestureDetector(onTap: (){
+            ref.read(ageProvider.notifier).state++;
+          },child: Text('+')),
+        ],
+      ),
+    );
+  }
+}
